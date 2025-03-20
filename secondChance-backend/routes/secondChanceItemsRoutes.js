@@ -1,26 +1,27 @@
 const express = require("express");
 const router = express.Router();
 
-// Example in-memory data (replace with database later)
-const items = [
-    { id: 1, name: "Item 1", description: "First second chance item" },
-    { id: 2, name: "Item 2", description: "Second second chance item" }
+// Example in-memory data (replace with your actual database logic)
+let items = [
+    { id: 1, name: "Laptop", category: "Electronics" },
+    { id: 2, name: "Sofa", category: "Furniture" },
+    { id: 3, name: "Phone", category: "Electronics" },
+    { id: 4, name: "Table", category: "Furniture" }
 ];
 
-// Route to get all second chance items
-router.get("/api/secondchance/items", (req, res) => {
-    res.json(items);
-});
-
-// Route to get a specific item by ID
-router.get("/api/secondchance/items/:id", (req, res) => {
+// DELETE route to remove an item by its ID
+router.delete("/api/secondchance/items/:id", (req, res) => {
     const itemId = parseInt(req.params.id);
-    const item = items.find(i => i.id === itemId);
+    const itemIndex = items.findIndex(item => item.id === itemId);
 
-    if (!item) {
+    if (itemIndex === -1) {
         return res.status(404).json({ message: "Item not found" });
     }
-    res.json(item);
+
+    // Remove the item from the array
+    items.splice(itemIndex, 1);
+
+    res.status(200).json({ message: "Item deleted successfully" });
 });
 
 module.exports = router;
